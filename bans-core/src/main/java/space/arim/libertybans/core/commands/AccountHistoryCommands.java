@@ -69,6 +69,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 		}
 		String action = command.next();
         return switch (action.toLowerCase(Locale.ROOT)) {
+            case "clearalts" -> new ClearAltsExecution(sender, command);
             case "delete" -> new DeleteExecution(sender, command);
             case "list" -> new ListExecution(sender, command);
             default -> new UsageExecution();
@@ -79,7 +80,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 	public Stream<String> suggest(CmdSender sender, String arg, int argIndex) {
 		switch (argIndex) {
 		case 0:
-			return Stream.of("delete", "list").filter((subCmd) -> hasPermission(sender, subCmd));
+			return Stream.of("clearalts", "delete", "list").filter((subCmd) -> hasPermission(sender, subCmd));
 		case 1:
 			return tabCompletion.completeOfflinePlayerNames(sender);
 		default:
@@ -90,7 +91,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 
 	@Override
 	public boolean hasTabCompletePermission(CmdSender sender, String arg) {
-		return hasPermission(sender, "delete") || hasPermission(sender, "list");
+		return hasPermission(sender, "clearalts") || hasPermission(sender, "delete") || hasPermission(sender, "list");
 	}
 
 	private boolean hasPermission(CmdSender sender, String sub) {
@@ -144,6 +145,44 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 			});
 		}
 
+	}
+
+	private final class ClearAltsExecution extends AbstractCommandExecution {
+
+		ClearAltsExecution(CmdSender sender, CommandPackage command) {
+			super(sender, command);
+		}
+
+		private AccountHistorySection.ClearAlts clearAlts() {
+			return accountHistoryConfig().clearAlts();
+		}
+
+		@Override
+		public ReactionStage<Void> execute() {
+			if (!hasPermission(sender(), "clearalts")) {
+				sender().sendMessage(clearAlts().permission());
+				return null;
+			}
+			if (!command().hasNext()) {
+				sender().sendMessage(clearAlts().usage());
+				return null;
+			}
+			String target = command().next();
+			return argumentParser().parseOrLookupUUID(sender(), target).thenCompose((uuid) -> {
+				if (uuid == null) {
+					return completedFuture(null);
+				}
+				return accountHistory.deleteAltAddresses(uuid).thenAccept((deletedCount) -> {
+					if (deletedCount == 0) {
+						sender().sendMessage(clearAlts().noneFound().replaceText("%TARGET%", target));
+						return;
+					}
+					sender().sendMessage(clearAlts().success()
+							.replaceText("%TARGET%", target)
+							.replaceText("%COUNT%", Integer.toString(deletedCount)));
+				});
+			});
+		}
 	}
 
 	private final class ListExecution extends AbstractCommandExecution {

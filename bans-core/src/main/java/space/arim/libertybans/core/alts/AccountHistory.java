@@ -38,6 +38,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static space.arim.libertybans.core.schema.tables.Addresses.ADDRESSES;
@@ -123,6 +124,24 @@ public final class AccountHistory {
 					.and(ADDRESSES.UPDATED.eq(recorded))
 					.execute();
 			return updateCount != 0;
+		});
+	}
+
+	public CentralisedFuture<Integer> deleteAltAddresses(UUID user) {
+		return queryExecutor.get().queryWithRetry((context, transaction) -> {
+			Set<NetworkAddress> targetAddresses = context
+					.select(ADDRESSES.ADDRESS)
+					.from(ADDRESSES)
+					.where(ADDRESSES.UUID.eq(user))
+					.fetchSet(ADDRESSES.ADDRESS);
+			if (targetAddresses.isEmpty()) {
+				return 0;
+			}
+			return context
+					.deleteFrom(ADDRESSES)
+					.where(ADDRESSES.UUID.ne(user))
+					.and(ADDRESSES.ADDRESS.in(targetAddresses))
+					.execute();
 		});
 	}
 
