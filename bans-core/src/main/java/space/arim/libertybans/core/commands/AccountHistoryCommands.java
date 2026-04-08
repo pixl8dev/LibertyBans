@@ -21,6 +21,7 @@ package space.arim.libertybans.core.commands;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import space.arim.libertybans.api.NetworkAddress;
 import space.arim.libertybans.core.alts.AccountHistory;
 import space.arim.libertybans.core.alts.AccountHistoryFormatter;
 import space.arim.libertybans.core.alts.AccountHistorySection;
@@ -71,6 +72,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
         return switch (action.toLowerCase(Locale.ROOT)) {
             case "clearalts" -> new ClearAltsExecution(sender, command);
             case "delete" -> new DeleteExecution(sender, command);
+            case "deleteip" -> new DeleteIpExecution(sender, command);
             case "list" -> new ListExecution(sender, command);
             default -> new UsageExecution();
         };
@@ -80,7 +82,8 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 	public Stream<String> suggest(CmdSender sender, String arg, int argIndex) {
 		switch (argIndex) {
 		case 0:
-			return Stream.of("clearalts", "delete", "list").filter((subCmd) -> hasPermission(sender, subCmd));
+			return Stream.of("clearalts", "delete", "deleteip", "list")
+					.filter((subCmd) -> hasPermission(sender, subCmd));
 		case 1:
 			return tabCompletion.completeOfflinePlayerNames(sender);
 		default:
@@ -91,7 +94,8 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 
 	@Override
 	public boolean hasTabCompletePermission(CmdSender sender, String arg) {
-		return hasPermission(sender, "clearalts") || hasPermission(sender, "delete") || hasPermission(sender, "list");
+		return hasPermission(sender, "clearalts") || hasPermission(sender, "delete")
+				|| hasPermission(sender, "deleteip") || hasPermission(sender, "list");
 	}
 
 	private boolean hasPermission(CmdSender sender, String sub) {
@@ -181,6 +185,44 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 							.replaceText("%TARGET%", target)
 							.replaceText("%COUNT%", Integer.toString(deletedCount)));
 				});
+			});
+		}
+	}
+
+	private final class DeleteIpExecution extends AbstractCommandExecution {
+
+		DeleteIpExecution(CmdSender sender, CommandPackage command) {
+			super(sender, command);
+		}
+
+		private AccountHistorySection.DeleteIp deleteIp() {
+			return accountHistoryConfig().deleteIp();
+		}
+
+		@Override
+		public ReactionStage<Void> execute() {
+			if (!hasPermission(sender(), "deleteip")) {
+				sender().sendMessage(deleteIp().permission());
+				return null;
+			}
+			if (!command().hasNext()) {
+				sender().sendMessage(deleteIp().usage());
+				return null;
+			}
+			String target = command().next();
+			NetworkAddress address = argumentParser().parseAddress(target);
+			if (address == null) {
+				sender().sendMessage(deleteIp().usage());
+				return null;
+			}
+			return accountHistory.deleteAllAccountsWithAddress(address).thenAccept((deletedCount) -> {
+				if (deletedCount == 0) {
+					sender().sendMessage(deleteIp().noneFound().replaceText("%TARGET%", target));
+					return;
+				}
+				sender().sendMessage(deleteIp().success()
+						.replaceText("%TARGET%", target)
+						.replaceText("%COUNT%", Integer.toString(deletedCount)));
 			});
 		}
 	}

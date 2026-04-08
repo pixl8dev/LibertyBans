@@ -119,6 +119,11 @@ public class StandardArgumentParser implements ArgumentParser {
 	}
 
 	@Override
+	public @Nullable NetworkAddress parseAddress(String targetArg) {
+		return AddressParser.parseIpv4(targetArg);
+	}
+
+	@Override
 	public CentralisedFuture<@Nullable Operator> parseOperator(CmdSender sender, String operatorArg) {
 		if (ContainsCI.containsIgnoreCase(configs.getMessagesConfig().formatting().consoleArguments(), operatorArg)) {
 			return completedFuture(ConsoleOperator.INSTANCE);

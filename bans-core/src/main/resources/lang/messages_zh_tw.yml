@@ -392,7 +392,7 @@ account-history:
      # %DATE_RECORDED_RAW% - the raw timestamp the join was recorded
     layout: '%USERNAME% &7(在 %ADDRESS%) 在 %DATE_RECORDED% (%DATE_RECORDED_RAW%)||ttp:&7點擊以刪除此儲存的帳號||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%'
 
-  usage: '&c用法: /accounthistory <delete|list>'
+  usage: '&c用法: /accounthistory <clearalts|delete|deleteip|list>'
 
  # Regards /unban, /unmute, /unwarn
 removals:

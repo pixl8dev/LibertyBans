@@ -239,4 +239,41 @@ public class AccountHistoryIT {
 		assertEquals(0, accountHistory.deleteAltAddresses(UUID.randomUUID()).join(), "No addresses for unknown player");
 	}
 
+	@TestTemplate
+	@SetTime(unixTime = 1636233200)
+	public void deleteAllAccountsWithAddress(Guardian guardian, SettableTime time) {
+		final Instant startTime = Instant.ofEpochSecond(1636233200);
+		final Instant oneDayLater = startTime.plus(ONE_DAY);
+
+		UUID player = UUID.randomUUID();
+		String playerName = "Player1";
+		UUID alt = UUID.randomUUID();
+		String altName = "PlayerAlt";
+		UUID unrelated = UUID.randomUUID();
+		String unrelatedName = "PlayerOther";
+		NetworkAddress sharedAddress = randomAddress();
+		NetworkAddress playerNewAddress = randomAddress();
+		NetworkAddress unrelatedAddress = randomAddress();
+
+		guardian.executeAndCheckConnection(player, playerName, sharedAddress).join();
+		guardian.executeAndCheckConnection(alt, altName, sharedAddress).join();
+		time.advanceBy(ONE_DAY);
+		guardian.executeAndCheckConnection(player, playerName, playerNewAddress).join();
+		guardian.executeAndCheckConnection(unrelated, unrelatedName, unrelatedAddress).join();
+
+		assertEquals(2, accountHistory.deleteAllAccountsWithAddress(sharedAddress).join(),
+				"Delete every recorded account with the shared address");
+		assertEquals(
+				List.of(accountHistory.newAccount(player, playerName, playerNewAddress, oneDayLater)),
+				supervisor.knownAccounts(PlayerVictim.of(player)).join());
+		assertEquals(List.of(), supervisor.knownAccounts(PlayerVictim.of(alt)).join());
+		assertEquals(
+				List.of(accountHistory.newAccount(unrelated, unrelatedName, unrelatedAddress, oneDayLater)),
+				supervisor.knownAccounts(PlayerVictim.of(unrelated)).join());
+		assertEquals(List.of(), supervisor.knownAccounts(AddressVictim.of(sharedAddress)).join());
+
+		assertEquals(0, accountHistory.deleteAllAccountsWithAddress(randomAddress()).join(),
+				"No accounts should be removed for an unknown address");
+	}
+
 }

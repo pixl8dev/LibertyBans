@@ -355,7 +355,7 @@ account-history:
       - '&cSyntax: /accounthistory delete <Spieler> <Timestamp>.&f'
       - '&7Der Timestamp (in Unix-Sekunden) kann von /accounthistory list bekommen werden'
 
-  usage: '&cSyntax: /accounthistory <delete|list>'
+  usage: '&cSyntax: /accounthistory <clearalts|delete|deleteip|list>'
    # Regards /accounthistory list <user>
   listing:
      # The message to display before the account listing. Set to an empty string to disable
@@ -439,6 +439,4 @@ removals:
       both: '&cDu kannst das nicht für Spieler / IP-Adressen tun.'
       uuid: '&cDu kannst das nicht für Spieler tun.'
       ip-address: '&cDu kannst das nicht für IP-Adressen tun.'
-
-
 

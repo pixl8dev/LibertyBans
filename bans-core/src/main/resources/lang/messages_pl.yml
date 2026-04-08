@@ -48,7 +48,7 @@ account-history:
       - '&cUżycie: /accounthistory delete <nick> <znacznik_czasu>.&f'
       - '&7Znacznik czasu jest podany w sekundach Unix i zazwyczaj jest uzyskiwany z polecenia /accounthistory list'
 
-  usage: '&cUżycie: /accounthistory <delete|list>'
+  usage: '&cUżycie: /accounthistory <clearalts|delete|deleteip|list>'
    # Regards /accounthistory list <user>
   listing:
     none-found: '&7Nie znaleziono zarejestrowanych kont.'

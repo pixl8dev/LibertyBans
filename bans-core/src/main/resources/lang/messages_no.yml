@@ -331,7 +331,7 @@ account-history:
       - '&7Tidsstemplet er i unix sekunder og er vanligvis hentet fra /accounthistory list'
     no-such-account: '&c%TARGET% har ingen registrert konto for det angitte tidsstemplet.'
 
-  usage: '&cBruk: /accounthistory <delete|list>'
+  usage: '&cBruk: /accounthistory <clearalts|delete|deleteip|list>'
   # Regards /accounthistory list <user>
   listing:
     # The message to display before the account listing. Set to an empty string to disable
@@ -434,6 +434,4 @@ additions:
       uuid: '&cDu kan ikke gjøre dette mot spillere.'
       ip-address: '&cDu kan ikke gjøre dette mot IP adresser.'
       both: '&cDu kan ikke gjøre dette mot spillere og deres IP adresser.'
-
-
 

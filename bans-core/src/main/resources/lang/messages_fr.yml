@@ -374,7 +374,7 @@ account-history:
     layout: '%USERNAME% &7(ou %ADDRESS%) de %DATE_RECORDED% (%DATE_RECORDED_RAW%)||ttp:&7Cliquez ici pour supprimer ce compte enregistré||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%'
     usage: '&cUsage: /accounthistory list <utilisateur|ip>'
 
-  usage: '&cUsage: /accounthistory <delete|list>'
+  usage: '&cUsage: /accounthistory <clearalts|delete|deleteip|list>'
 
 admin:
   importing:
@@ -435,5 +435,3 @@ alts:
       - '&c&o%TARGET%&7 est peut-être un compte secondaire.&f'
       - '&7Forte possibilité - Même adresse que le joueur banni.&f'
       - '&7Simple possibilité - Lié à un joueur banni par une adresse antérieure commune'
-
-

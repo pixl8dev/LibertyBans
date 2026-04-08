@@ -203,7 +203,7 @@ account-history:
       - '&7時刻印はunix秒単位であり、通常は「/accounthistory list」から取得します。'
     no-such-account: '&c%TARGET%のアカウント記録は、指定した時刻印では残っていません。'
 
-  usage: '&c使用方法: /accounthistory <delete|list>'
+  usage: '&c使用方法: /accounthistory <clearalts|delete|deleteip|list>'
    # Regards /accounthistory list <user>
   listing:
      # How a single recorded account should be displayed

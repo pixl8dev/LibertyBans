@@ -434,5 +434,4 @@ account-history:
     # %DATE_RECORDED_RAW% - the raw timestamp the join was recorded
     layout: '%USERNAME% &7(%ADDRESS%) на %DATE_RECORDED% (%DATE_RECORDED_RAW%)||ttp:&7Нажми здесь, чтобы удалить аккаунт||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%'
 
-  usage: '&cИспользование: /accounthistory <delete|list>'
-
+  usage: '&cИспользование: /accounthistory <clearalts|delete|deleteip|list>'

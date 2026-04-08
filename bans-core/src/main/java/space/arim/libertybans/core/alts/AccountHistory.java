@@ -145,6 +145,14 @@ public final class AccountHistory {
 		});
 	}
 
+	public CentralisedFuture<Integer> deleteAllAccountsWithAddress(NetworkAddress address) {
+		Objects.requireNonNull(address, "address");
+		return queryExecutor.get().queryWithRetry((context, transaction) -> context
+				.deleteFrom(ADDRESSES)
+				.where(ADDRESSES.ADDRESS.eq(address))
+				.execute());
+	}
+
 	// Uses equals and hashCode for AccountHistory; see below
 	record KnownAccountImpl(UUID uuid, String username, NetworkAddress address, Instant recorded,
 							AccountHistory accountHistory) implements KnownAccount {

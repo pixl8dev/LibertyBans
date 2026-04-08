@@ -20,6 +20,7 @@
 package space.arim.libertybans.core.commands.extra;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import space.arim.libertybans.api.NetworkAddress;
 import space.arim.libertybans.api.Operator;
 import space.arim.libertybans.api.Victim;
 import space.arim.libertybans.core.commands.CommandPackage;
@@ -32,6 +33,8 @@ import java.util.UUID;
 public interface ArgumentParser {
 
 	CentralisedFuture<@Nullable UUID> parseOrLookupUUID(CmdSender sender, String targetArg);
+
+	@Nullable NetworkAddress parseAddress(String targetArg);
 
 	CentralisedFuture<@Nullable Victim> parseVictim(CmdSender sender, String targetArg, ParseVictim how);
 
