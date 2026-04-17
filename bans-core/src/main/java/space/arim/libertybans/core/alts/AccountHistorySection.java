@@ -26,7 +26,7 @@ import space.arim.dazzleconf.annote.*;
 @ConfHeader("Configuration for the /accounthistory command")
 public interface AccountHistorySection {
 
-	@ConfDefault.DefaultString("&cUsage: /accounthistory <clearalts|delete|deleteip|list>")
+	@ConfDefault.DefaultString("&cUsage: /accounthistory <clearalts|clearallalts|delete|deleteip|list>")
 	Component usage();
 
 	@SubSection
@@ -37,6 +37,9 @@ public interface AccountHistorySection {
 
 	@SubSection
 	ClearAlts clearAlts();
+
+	@SubSection
+	ClearAllAlts clearAllAlts();
 
 	@ConfHeader("Pertains to /accounthistory delete <user> <timestamp>")
 	interface Delete {
@@ -88,6 +91,23 @@ public interface AccountHistorySection {
 		ComponentText noneFound();
 
 		@ConfDefault.DefaultString("&7Removed &e%COUNT% &7recorded alt IP entr(ies) for &e%TARGET%&7.")
+		ComponentText success();
+	}
+
+	@ConfHeader("Pertains to /accounthistory clearallalts")
+	interface ClearAllAlts {
+
+		@ConfDefault.DefaultString("&cUsage: /accounthistory clearallalts")
+		Component usage();
+
+		@ConfDefault.DefaultString("&cYou may not clear recorded alt IPs for everyone.")
+		Component permission();
+
+		@ConfKey("none-found")
+		@ConfDefault.DefaultString("&cNo recorded alt IPs were found for any users.")
+		ComponentText noneFound();
+
+		@ConfDefault.DefaultString("&7Removed &e%COUNT% &7recorded alt IP entr(ies) for all users.")
 		ComponentText success();
 	}
 

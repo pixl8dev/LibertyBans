@@ -43,8 +43,11 @@ import java.util.UUID;
 
 import static space.arim.libertybans.core.schema.tables.Addresses.ADDRESSES;
 import static space.arim.libertybans.core.schema.tables.LatestNames.LATEST_NAMES;
+import static org.jooq.impl.DSL.countDistinct;
 
 public final class AccountHistory {
+
+	private static final int BULK_DELETE_BATCH_SIZE = 1_000;
 
 	private final Provider<QueryExecutor> queryExecutor;
 
@@ -142,6 +145,28 @@ public final class AccountHistory {
 					.where(ADDRESSES.UUID.ne(user))
 					.and(ADDRESSES.ADDRESS.in(targetAddresses))
 					.execute();
+		});
+	}
+
+	public CentralisedFuture<Integer> deleteAllAltAddresses() {
+		return queryExecutor.get().queryWithRetry((context, transaction) -> {
+			int deletedCount = 0;
+			while (true) {
+				Set<NetworkAddress> targetAddresses = context
+						.select(ADDRESSES.ADDRESS)
+						.from(ADDRESSES)
+						.groupBy(ADDRESSES.ADDRESS)
+						.having(countDistinct(ADDRESSES.UUID).gt(1))
+						.limit(BULK_DELETE_BATCH_SIZE)
+						.fetchSet(ADDRESSES.ADDRESS);
+				if (targetAddresses.isEmpty()) {
+					return deletedCount;
+				}
+				deletedCount += context
+						.deleteFrom(ADDRESSES)
+						.where(ADDRESSES.ADDRESS.in(targetAddresses))
+						.execute();
+			}
 		});
 	}
 

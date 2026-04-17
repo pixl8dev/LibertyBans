@@ -71,6 +71,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 		String action = command.next();
         return switch (action.toLowerCase(Locale.ROOT)) {
             case "clearalts" -> new ClearAltsExecution(sender, command);
+            case "clearallalts" -> new ClearAllAltsExecution(sender, command);
             case "delete" -> new DeleteExecution(sender, command);
             case "deleteip" -> new DeleteIpExecution(sender, command);
             case "list" -> new ListExecution(sender, command);
@@ -82,7 +83,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 	public Stream<String> suggest(CmdSender sender, String arg, int argIndex) {
 		switch (argIndex) {
 		case 0:
-			return Stream.of("clearalts", "delete", "deleteip", "list")
+			return Stream.of("clearalts", "clearallalts", "delete", "deleteip", "list")
 					.filter((subCmd) -> hasPermission(sender, subCmd));
 		case 1:
 			return tabCompletion.completeOfflinePlayerNames(sender);
@@ -94,7 +95,7 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 
 	@Override
 	public boolean hasTabCompletePermission(CmdSender sender, String arg) {
-		return hasPermission(sender, "clearalts") || hasPermission(sender, "delete")
+		return hasPermission(sender, "clearalts") || hasPermission(sender, "clearallalts") || hasPermission(sender, "delete")
 				|| hasPermission(sender, "deleteip") || hasPermission(sender, "list");
 	}
 
@@ -185,6 +186,37 @@ public final class AccountHistoryCommands extends AbstractSubCommandGroup {
 							.replaceText("%TARGET%", target)
 							.replaceText("%COUNT%", Integer.toString(deletedCount)));
 				});
+			});
+		}
+	}
+
+	private final class ClearAllAltsExecution extends AbstractCommandExecution {
+
+		ClearAllAltsExecution(CmdSender sender, CommandPackage command) {
+			super(sender, command);
+		}
+
+		private AccountHistorySection.ClearAllAlts clearAllAlts() {
+			return accountHistoryConfig().clearAllAlts();
+		}
+
+		@Override
+		public ReactionStage<Void> execute() {
+			if (!hasPermission(sender(), "clearallalts")) {
+				sender().sendMessage(clearAllAlts().permission());
+				return null;
+			}
+			if (command().hasNext()) {
+				sender().sendMessage(clearAllAlts().usage());
+				return null;
+			}
+			return accountHistory.deleteAllAltAddresses().thenAccept((deletedCount) -> {
+				if (deletedCount == 0) {
+					sender().sendMessage(clearAllAlts().noneFound());
+					return;
+				}
+				sender().sendMessage(clearAllAlts().success()
+						.replaceText("%COUNT%", Integer.toString(deletedCount)));
 			});
 		}
 	}

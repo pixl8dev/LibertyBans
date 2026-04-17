@@ -25,9 +25,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import space.arim.libertybans.api.AddressVictim;
 import space.arim.libertybans.api.NetworkAddress;
 import space.arim.libertybans.api.PlayerVictim;
+import space.arim.libertybans.api.PunishmentType;
 import space.arim.libertybans.api.user.KnownAccount;
 import space.arim.libertybans.core.alts.AccountHistory;
 import space.arim.libertybans.core.alts.Supervisor;
+import space.arim.libertybans.api.punish.Punishment;
+import space.arim.libertybans.api.punish.PunishmentDrafter;
+import space.arim.libertybans.api.select.PunishmentSelector;
 import space.arim.libertybans.core.selector.Guardian;
 import space.arim.libertybans.core.service.SettableTime;
 import space.arim.libertybans.it.InjectionInvocationContextProvider;
@@ -39,6 +43,7 @@ import space.arim.libertybans.it.env.platform.QuackPlayer;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -274,6 +279,54 @@ public class AccountHistoryIT {
 
 		assertEquals(0, accountHistory.deleteAllAccountsWithAddress(randomAddress()).join(),
 				"No accounts should be removed for an unknown address");
+	}
+
+	@TestTemplate
+	@SetTime(unixTime = 1636233200)
+	public void deleteAllAltAddresses(Guardian guardian, SettableTime time,
+									  PunishmentDrafter drafter, PunishmentSelector selector) {
+		final Instant startTime = Instant.ofEpochSecond(1636233200);
+		final Instant oneDayLater = startTime.plus(ONE_DAY);
+
+		UUID player = UUID.randomUUID();
+		String playerName = "Player1";
+		UUID alt = UUID.randomUUID();
+		String altName = "PlayerAlt";
+		UUID unrelated = UUID.randomUUID();
+		String unrelatedName = "PlayerOther";
+		NetworkAddress sharedAddress = randomAddress();
+		NetworkAddress playerNewAddress = randomAddress();
+		NetworkAddress unrelatedAddress = randomAddress();
+
+		guardian.executeAndCheckConnection(player, playerName, sharedAddress).join();
+		guardian.executeAndCheckConnection(alt, altName, sharedAddress).join();
+		time.advanceBy(ONE_DAY);
+		guardian.executeAndCheckConnection(player, playerName, playerNewAddress).join();
+		guardian.executeAndCheckConnection(unrelated, unrelatedName, unrelatedAddress).join();
+
+		Punishment playerBan = drafter.draftBuilder()
+				.type(PunishmentType.BAN)
+				.victim(PlayerVictim.of(player))
+				.reason("Testing global alt clearing")
+				.build().enactPunishment()
+				.toCompletableFuture().join()
+				.orElseThrow(AssertionError::new);
+
+		assertEquals(2, accountHistory.deleteAllAltAddresses().join(),
+				"Delete every recorded alt address");
+		assertEquals(
+				List.of(accountHistory.newAccount(player, playerName, playerNewAddress, oneDayLater)),
+				supervisor.knownAccounts(PlayerVictim.of(player)).join());
+		assertEquals(List.of(), supervisor.knownAccounts(PlayerVictim.of(alt)).join());
+		assertEquals(
+				List.of(accountHistory.newAccount(unrelated, unrelatedName, unrelatedAddress, oneDayLater)),
+				supervisor.knownAccounts(PlayerVictim.of(unrelated)).join());
+		assertEquals(List.of(), supervisor.knownAccounts(AddressVictim.of(sharedAddress)).join());
+		assertEquals(
+				Optional.of(playerBan),
+				selector.getApplicablePunishment(player, playerNewAddress, PunishmentType.BAN)
+						.toCompletableFuture().join(),
+				"Username/player bans should remain after clearing alt addresses");
 	}
 
 }

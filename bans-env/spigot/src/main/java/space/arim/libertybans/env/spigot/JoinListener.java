@@ -28,9 +28,14 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
+import space.arim.libertybans.api.NetworkAddress;
 import space.arim.libertybans.core.env.PlatformListener;
 import space.arim.libertybans.core.scope.ServerNameListener;
 import space.arim.libertybans.core.selector.Guardian;
+import space.arim.libertybans.core.selector.cache.MuteCache;
+import space.arim.libertybans.core.uuid.UUIDManager;
+
+import java.net.InetSocketAddress;
 
 @Singleton
 public final class JoinListener implements PlatformListener, Listener {
@@ -39,20 +44,28 @@ public final class JoinListener implements PlatformListener, Listener {
 	private final Guardian guardian;
 	private final ServerNameListener<Player, ?> serverNameListener;
 	private final SpigotEnforcer spigotEnforcer;
+	private final UUIDManager uuidManager;
+	private final MuteCache muteCache;
 
 	@Inject
 	public JoinListener(Plugin plugin, Guardian guardian,
-						ServerNameListener<Player, ?> serverNameListener, SpigotEnforcer spigotEnforcer) {
+						ServerNameListener<Player, ?> serverNameListener, SpigotEnforcer spigotEnforcer,
+						UUIDManager uuidManager, MuteCache muteCache) {
 		this.plugin = plugin;
         this.guardian = guardian;
         this.serverNameListener = serverNameListener;
         this.spigotEnforcer = spigotEnforcer;
+        this.uuidManager = uuidManager;
+        this.muteCache = muteCache;
     }
 
 	@Override
 	public void register() {
 		serverNameListener.register();
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+		for (Player player : plugin.getServer().getOnlinePlayers()) {
+			initialiseOnlinePlayer(player);
+		}
 	}
 
 	@Override
@@ -63,7 +76,15 @@ public final class JoinListener implements PlatformListener, Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onJoin(PlayerJoinEvent event) {
-		Player player = event.getPlayer();
+		initialiseOnlinePlayer(event.getPlayer());
+	}
+
+	private void initialiseOnlinePlayer(Player player) {
+		uuidManager.addCache(player.getUniqueId(), player.getName());
+		InetSocketAddress socketAddress = player.getAddress();
+		if (socketAddress != null) {
+			muteCache.cacheOnLogin(player.getUniqueId(), NetworkAddress.of(socketAddress.getAddress())).join();
+		}
 		guardian.onJoin(player, spigotEnforcer);
 		serverNameListener.onJoin(player, spigotEnforcer);
 	}
