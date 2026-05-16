@@ -67,6 +67,9 @@ public final class Association {
 	public void associateCurrentAddress(NetworkAddress address, Instant currentTime) {
 		Objects.requireNonNull(address, "address");
 		Objects.requireNonNull(currentTime, "currentTime");
+		if (address.isLocal()) {
+			return;
+		}
 		context
 				.insertInto(ADDRESSES)
 				.columns(ADDRESSES.UUID, ADDRESSES.ADDRESS, ADDRESSES.UPDATED)
@@ -80,6 +83,9 @@ public final class Association {
 	public void associatePastAddress(NetworkAddress address, Instant pastTime) {
 		Objects.requireNonNull(address, "address");
 		Objects.requireNonNull(pastTime, "pastTime");
+		if (address.isLocal()) {
+			return;
+		}
 		context
 				.insertInto(ADDRESSES)
 				.columns(ADDRESSES.UUID, ADDRESSES.ADDRESS, ADDRESSES.UPDATED)

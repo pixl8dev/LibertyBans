@@ -92,7 +92,7 @@ public final class Gatekeeper {
 			Punishment ban = selector.selectionByApplicabilityBuilder(uuid, address)
 					.type(PunishmentType.BAN)
 					.scopes(SelectionPredicate.matchingAnyOf(scopes))
-					.canAssumeUserRecorded(recordUserAssociation)
+					.canAssumeUserRecorded(recordUserAssociation && !address.isLocal())
 					.build()
 					.findFirstSpecificPunishment(context, currentTime, SortPunishments.LATEST_END_DATE_FIRST);
 			if (ban != null) {
@@ -148,7 +148,7 @@ public final class Gatekeeper {
 			return selector.selectionByApplicabilityBuilder(uuid, address)
 					.type(PunishmentType.BAN)
 					.scopes(SelectionPredicate.matchingOnly(serverScope))
-					.canAssumeUserRecorded(registerOnConnection || recordUserAssociation)
+					.canAssumeUserRecorded((registerOnConnection || recordUserAssociation) && !address.isLocal())
 					.build()
 					.findFirstSpecificPunishment(context, currentTime, SortPunishments.LATEST_END_DATE_FIRST);
 		}).thenCompose((punishment) -> {

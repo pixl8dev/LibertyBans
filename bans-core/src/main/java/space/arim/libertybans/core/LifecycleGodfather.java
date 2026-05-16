@@ -57,7 +57,8 @@ public class LifecycleGodfather extends AbstractBaseFoundation {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ThisClass.get());
 
 	@Inject
-	public LifecycleGodfather(PlatformId platformId, AsynchronicityManager asyncManager, Configs configs, DatabaseManager databaseManager,
+	public LifecycleGodfather(PlatformId platformId, AsynchronicityManager asyncManager, Configs configs,
+							  DatabaseManager databaseManager,
                               UUIDManager uuidManager, MuteCache muteCache, TabCompletion tabCompletion,
                               EnvironmentManager envManager, AddonCenter addonCenter,
                               LibertyBans api) {
@@ -82,6 +83,7 @@ public class LifecycleGodfather extends AbstractBaseFoundation {
 		asyncManager.startup();
 		configs.startup();
 		databaseManager.startup();
+		databaseManager.deleteLocalAddresses().join();
 		uuidManager.startup();
 		muteCache.startup();
 		tabCompletion.startup();
@@ -101,6 +103,7 @@ public class LifecycleGodfather extends AbstractBaseFoundation {
 		asyncManager.restart();
 		configs.restart();
 		databaseManager.restart();
+		databaseManager.deleteLocalAddresses().join();
 		uuidManager.restart();
 		muteCache.restart();
 		tabCompletion.restart();

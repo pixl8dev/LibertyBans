@@ -178,6 +178,7 @@ public final class AccountHistory {
 				.execute());
 	}
 
+
 	// Uses equals and hashCode for AccountHistory; see below
 	record KnownAccountImpl(UUID uuid, String username, NetworkAddress address, Instant recorded,
 							AccountHistory accountHistory) implements KnownAccount {

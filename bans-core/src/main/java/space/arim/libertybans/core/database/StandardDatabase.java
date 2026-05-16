@@ -67,6 +67,7 @@ public final class StandardDatabase implements InternalDatabase, AutoCloseable {
 
 	private ScheduledTask expirationRefreshTask;
 	private ScheduledTask synchronizationPollTask;
+	private ScheduledTask localAddressCleanupTask;
 
 	private static final Logger logger = LoggerFactory.getLogger(ThisClass.get());
 
@@ -93,6 +94,14 @@ public final class StandardDatabase implements InternalDatabase, AutoCloseable {
 				Duration.ofHours(3L),
 				DelayCalculators.fixedDelay()
 		);
+		localAddressCleanupTask = enhancedExecutor.scheduleRepeating(
+				() -> manager.deleteLocalAddresses().exceptionally((ex) -> {
+					logger.warn("Failed to clean up local addresses from address history", ex);
+					return null;
+				}),
+				Duration.ofMinutes(30L),
+				DelayCalculators.fixedDelay()
+		);
 		var synchronizationConf = manager.configs().getSqlConfig().synchronization();
 		if (synchronizationConf.enabled()) {
 			synchronizationPollTask = enhancedExecutor.scheduleRepeating(
@@ -105,6 +114,7 @@ public final class StandardDatabase implements InternalDatabase, AutoCloseable {
 
 	void cancelTasks() {
 		expirationRefreshTask.cancel();
+		localAddressCleanupTask.cancel();
 		if (synchronizationPollTask != null) {
 			synchronizationPollTask.cancel();
 			synchronizationPollTask = null;

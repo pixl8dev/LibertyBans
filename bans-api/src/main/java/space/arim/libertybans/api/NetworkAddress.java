@@ -18,6 +18,7 @@
  */
 package space.arim.libertybans.api;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -109,8 +110,29 @@ public final class NetworkAddress {
 	}
 
 	/**
+	 * Returns true if this is a local/private address that should never identify a real player:
+	 * loopback (127.x, ::1), site-local (10.x, 172.16-31.x, 192.168.x),
+	 * link-local (169.254.x, fe80::), unspecified (0.0.0.0, ::),
+	 * or IPv6 ULA (fc00::/7).
+	 */
+	public boolean isLocal() {
+		InetAddress addr = toInetAddress();
+		if (addr.isLoopbackAddress()
+				|| addr.isSiteLocalAddress()
+				|| addr.isLinkLocalAddress()
+				|| addr.isAnyLocalAddress()) {
+			return true;
+		}
+		// isSiteLocalAddress() misses IPv6 ULA (fc00::/7 covers fc00:: and fd00::)
+		if (addr instanceof Inet6Address) {
+			return (addr.getAddress()[0] & 0xFE) == 0xFC;
+		}
+		return false;
+	}
+
+	/**
 	 * Returns a textual representation of this network address
-	 * 
+	 *
 	 */
 	@Override
 	public String toString() {

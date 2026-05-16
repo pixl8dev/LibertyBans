@@ -22,16 +22,21 @@ package space.arim.libertybans.core.database;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+import space.arim.libertybans.api.NetworkAddress;
 import space.arim.libertybans.api.database.PunishmentDatabase;
 import space.arim.libertybans.bootstrap.StartupException;
 import space.arim.libertybans.core.Part;
 import space.arim.libertybans.core.config.Configs;
 import space.arim.libertybans.core.punish.GlobalEnforcement;
 import space.arim.libertybans.core.service.Time;
+import space.arim.omnibus.util.concurrent.CentralisedFuture;
 import space.arim.omnibus.util.concurrent.EnhancedExecutor;
 import space.arim.omnibus.util.concurrent.FactoryOfTheFuture;
 
 import java.nio.file.Path;
+import java.util.List;
+
+import static space.arim.libertybans.core.schema.tables.Addresses.ADDRESSES;
 
 @Singleton
 public class DatabaseManager implements Part {
@@ -75,6 +80,25 @@ public class DatabaseManager implements Part {
 
 	public InternalDatabase getInternal() {
 		return database;
+	}
+
+	public CentralisedFuture<Integer> deleteLocalAddresses() {
+		return database.queryWithRetry((context, transaction) -> {
+			List<NetworkAddress> localAddresses = context
+					.selectDistinct(ADDRESSES.ADDRESS)
+					.from(ADDRESSES)
+					.fetch(ADDRESSES.ADDRESS)
+					.stream()
+					.filter(NetworkAddress::isLocal)
+					.toList();
+			if (localAddresses.isEmpty()) {
+				return 0;
+			}
+			return context
+					.deleteFrom(ADDRESSES)
+					.where(ADDRESSES.ADDRESS.in(localAddresses))
+					.execute();
+		});
 	}
 	
 	public PunishmentDatabase getExternal() {
