@@ -20,17 +20,14 @@
 package space.arim.libertybans.env.spigot;
 
 import jakarta.inject.Inject;
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import space.arim.libertybans.core.env.EnvMessageChannel;
 import space.arim.libertybans.core.env.PlatformListener;
 import space.arim.libertybans.core.env.PluginMessageAsBytes;
-import space.arim.libertybans.core.env.message.KickPlayer;
 import space.arim.libertybans.core.env.message.PluginMessage;
 
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public final class SpigotMessageChannel implements PlatformListener, EnvMessageChannel<PluginMessageListener> {
@@ -68,22 +65,6 @@ public final class SpigotMessageChannel implements PlatformListener, EnvMessageC
 			);
 		}
 		return canSend;
-	}
-
-	// Bedrock players (UUID starts with 000000) may not be reachable via the normal kick path
-	// because they connect through a separate proxy. After 5 seconds, if they are still online,
-	// we send a raw BungeeCord KickPlayer plugin message directly to their proxy.
-	void scheduleBedrockKickFallback(Player player, Component message) {
-		UUID uuid = player.getUniqueId();
-		String name = player.getName();
-		byte[] payload = new PluginMessageAsBytes<>(new KickPlayer())
-				.generateBytes(new KickPlayer.Data(name, message));
-		plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-			Player online = plugin.getServer().getPlayer(uuid);
-			if (online != null) {
-				online.sendPluginMessage(plugin, BUNGEE_CHANNEL, payload);
-			}
-		}, 100L); // 5 seconds
 	}
 
 	@Override

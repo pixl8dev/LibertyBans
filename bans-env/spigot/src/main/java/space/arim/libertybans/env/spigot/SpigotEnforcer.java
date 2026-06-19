@@ -30,7 +30,6 @@ import space.arim.api.env.AudienceRepresenter;
 import space.arim.libertybans.core.config.InternalFormatter;
 import space.arim.libertybans.core.env.AbstractEnvEnforcer;
 import space.arim.libertybans.core.env.Interlocutor;
-import space.arim.libertybans.core.env.message.KickPlayer;
 import space.arim.libertybans.core.env.message.PluginMessage;
 import space.arim.morepaperlib.adventure.MorePaperLibAdventure;
 import space.arim.omnibus.util.concurrent.CentralisedFuture;
@@ -77,18 +76,11 @@ public class SpigotEnforcer extends AbstractEnvEnforcer<Player> {
 	@Override
 	public void kickPlayer(Player player, Component message) {
 		morePaperLibAdventure.kickPlayer(player, message);
-		if (player.getUniqueId().toString().startsWith("000000")) {
-			messageChannel.scheduleBedrockKickFallback(player, message);
-		}
 	}
 
 	@Override
 	public <D> boolean sendPluginMessageIfListening(Player player, PluginMessage<D, ?> pluginMessage, D data) {
-		boolean sent = messageChannel.sendPluginMessage(player, pluginMessage, data);
-		if (sent && pluginMessage instanceof KickPlayer && player.getUniqueId().toString().startsWith("000000")) {
-			messageChannel.scheduleBedrockKickFallback(player, ((KickPlayer.Data) (Object) data).message());
-		}
-		return sent;
+		return messageChannel.sendPluginMessage(player, pluginMessage, data);
 	}
 
 	@Override
