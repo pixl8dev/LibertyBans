@@ -26,7 +26,7 @@ import space.arim.dazzleconf.annote.*;
 @ConfHeader("Configuration for the /accounthistory command")
 public interface AccountHistorySection {
 
-	@ConfDefault.DefaultString("&cUsage: /accounthistory <clearalts|clearallalts|delete|deleteip|list>")
+	@ConfDefault.DefaultString("Usage: &6/accounthistory <clearalts|clearallalts|delete|deleteip|list>")
 	Component usage();
 
 	@SubSection
@@ -45,18 +45,18 @@ public interface AccountHistorySection {
 	interface Delete {
 
 		@ConfDefault.DefaultStrings({
-				"&cUsage: /accounthistory delete <user> <timestamp>.",
-				"&7The timestamp is in unix seconds and is usually obtained from /accounthistory list"})
+				"Usage: &6/accounthistory delete <user> <timestamp>.",
+				"The timestamp is in unix seconds and is usually obtained from &6/accounthistory list"})
 		Component usage();
 
-		@ConfDefault.DefaultString("&cYou may not delete recorded accounts.")
+		@ConfDefault.DefaultString("You may not delete recorded accounts.")
 		Component permission();
 
 		@ConfKey("no-such-account")
-		@ConfDefault.DefaultString("&c%TARGET% has no recorded account for the specified timestamp.")
+		@ConfDefault.DefaultString("&6%TARGET%&f has no recorded account for the specified timestamp.")
 		ComponentText noSuchAccount();
 
-		@ConfDefault.DefaultString("&7Successfully deleted the recorded account of &e%TARGET%")
+		@ConfDefault.DefaultString("Successfully deleted the recorded account of &6%TARGET%")
 		ComponentText success();
 	}
 
@@ -117,14 +117,14 @@ public interface AccountHistorySection {
 	@ConfHeader("Regards /accounthistory list")
 	interface Listing extends AccountListFormatting {
 
-		@ConfDefault.DefaultString("&cUsage: /accounthistory list <user|ip> [page]")
+		@ConfDefault.DefaultString("Usage: &6/accounthistory list <user|ip> [page]")
 		Component usage();
 
-		@ConfDefault.DefaultString("&cYou may not list recorded accounts.")
+		@ConfDefault.DefaultString("You may not list recorded accounts.")
 		Component permission();
 
 		@ConfKey("none-found")
-		@ConfDefault.DefaultString("&7Page does not exist.")
+		@ConfDefault.DefaultString("No recorded accounts found")
 		ComponentText noneFound();
 
 		@Override
@@ -138,7 +138,7 @@ public interface AccountHistorySection {
 				"%LASTPAGE% - the last page number",
 				"%LASTPAGE_KEY% - a code which if used with the command, shows the last page"
 		})
-		@ConfDefault.DefaultString("&7Known accounts report for &c&o%TARGET%&7 follows.")
+		@ConfDefault.DefaultString("Known accounts report for &6%TARGET%&f follows.")
 		ComponentText header();
 
 		@ConfComments({
@@ -149,7 +149,7 @@ public interface AccountHistorySection {
 				"%DATE_RECORDED% - the date the join was recorded",
 				"%DATE_RECORDED_RAW% - the raw timestamp the join was recorded"
 		})
-		@ConfDefault.DefaultString("%USERNAME% &r&7(on %ADDRESS%) at %DATE_RECORDED% (%DATE_RECORDED_RAW%)||ttp:&7Click to delete this stored account||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%")
+		@ConfDefault.DefaultString("&6%USERNAME%&f (on &6%ADDRESS%&f) at &6%DATE_RECORDED%&f (&6%DATE_RECORDED_RAW%&f)||ttp:Click to delete this stored account||cmd:/accounthistory delete %TARGET% %DATE_RECORDED_RAW%")
 		ComponentText layout();
 
 		@ConfComments("Amount of accounts to display per page")
@@ -160,7 +160,7 @@ public interface AccountHistorySection {
 
 		@Override
 		@ConfComments("The separator between list entries")
-		@ConfDefault.DefaultString("\n")
+		@ConfDefault.DefaultString("")
 		Component separator();
 
 		@Override
@@ -168,7 +168,7 @@ public interface AccountHistorySection {
 				"How to format the footer. This is sent after every page.",
 				"Available variables are the same as for the header."
 		})
-		@ConfDefault.DefaultString("&7<Next Page>||ttp:Click for next page||cmd:/libertybans accounthistory %TARGET% %NEXTPAGE_KEY%")
+		@ConfDefault.DefaultString("&6<Next Page>||ttp:Click for next page||cmd:/libertybans accounthistory %TARGET% %NEXTPAGE_KEY%")
 		ComponentText footer();
 
 	}

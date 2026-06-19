@@ -87,6 +87,11 @@
     <dependencies>
         <dependency>
             <groupId>space.arim.libertybans.addon</groupId>
+            <artifactId>addon-command-banreason</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>space.arim.libertybans.addon</groupId>
             <artifactId>addon-command-checkpunish</artifactId>
             <version>${project.version}</version>
         </dependency>

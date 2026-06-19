@@ -39,85 +39,84 @@ public interface AdditionsSection {
 	interface BanAddition extends PunishmentAdditionSection.WithDurationPerm {
 
 		@Override
-		@DefaultString("&cUsage: /ban &e<player> [time] <reason>&c.")
+		@DefaultString("Usage: /ban <player> [time] <reason>.")
 		Component usage();
 
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 cannot be banned.")
+		@DefaultString("&6%TARGET%&f cannot be banned.")
 		ComponentText exempted();
 
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 is already banned.")
+		@DefaultString("&6%TARGET%&f is already banned.")
 		ComponentText conflicting();
 
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&aBanned &c&o%VICTIM%&r&a for &a&o%DURATION%&r&a because of &e&o%REASON%&r&a.")
+		@DefaultString("Banned &6%VICTIM%&f for %DURATION% because of &6%REASON%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%OPERATOR%&r&7 banned &c&o%VICTIM%&r&7 for &a&o%DURATION%&r&7 because of &e&o%REASON%&r&7.")
+		@DefaultString("&6%OPERATOR%&f banned &6%VICTIM%&f for %DURATION% because of &6%REASON%&f.")
 		ComponentText successNotification();
-		
+
 		@Override
 		@DefaultStrings({
-				"&7&lBanned",
-				"&cDuration: &e%TIME_REMAINING%",
-				"&7",
-				"&c&lReason",
-				"&7%REASON%",
-				"&7",
-				"&3&lAppeal Your Punishment",
-				"&cWebsite: &7website",
-				"&cDiscord: &7discord"})
+				"&6BANNED&f",
+				"You have been banned from FadeMC.",
+				"",
+				"Duration: &6%TIME_REMAINING%&f",
+				"",
+				"Reason: &6%REASON%&f",
+				"",
+				"You may appeal your punishment below:",
+				"Discord: &6discord.fademc.xyz"})
 		ComponentText layout();
-		
+
 	}
 
 	interface MuteAddition extends PunishmentAdditionSection.WithDurationPerm {
-		
+
 		@Override
-		@DefaultString("&cUsage: /mute &e<player> [time] <reason>&c.")
+		@DefaultString("Usage: /mute <player> [time] <reason>.")
 		Component usage();
 
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 cannot be muted.")
+		@DefaultString("&6%TARGET%&f cannot be muted.")
 		ComponentText exempted();
 
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 is already muted.")
+		@DefaultString("&6%TARGET%&f is already muted.")
 		ComponentText conflicting();
 
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&aMuted &c&o%VICTIM%&r&a for &a&o%DURATION%&r&a because of &e&o%REASON%&r&a.")
+		@DefaultString("Muted &6%VICTIM%&f for %DURATION% because of &6%REASON%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%OPERATOR%&r&7 muted &c&o%VICTIM%&r&7 for &a&o%DURATION%&r&7 because of &e&o%REASON%&r&7.")
+		@DefaultString("&6%OPERATOR%&f muted &6%VICTIM%&f for %DURATION% because of &6%REASON%&f.")
 		ComponentText successNotification();
-		
+
 		@Override
 		@DefaultStrings({
-				"&7&lMuted",
-				"&cDuration: &e%TIME_REMAINING%",
-				"&7",
-				"&c&lReason",
-				"&7%REASON%"})
+				"&6MUTED&f",
+				"Duration: &6%TIME_REMAINING%&f",
+				"",
+				"Reason: &6%REASON%"})
 		ComponentText layout();
-		
+
 	}
-	
+
 	interface WarnAddition extends PunishmentAdditionSection.WithDurationPerm {
-		
+
 		@Override
-		@DefaultString("&cUsage: /warn &e<player> [time] <reason>&c.")
+		@DefaultString("Usage: /warn <player> [time] <reason>.")
 		Component usage();
 
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 cannot be warned.")
+		@DefaultString("&6%TARGET%&f cannot be warned.")
 		ComponentText exempted();
 
 		@Override
@@ -127,33 +126,32 @@ public interface AdditionsSection {
 
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&aWarned &c&o%VICTIM%&r&a for &a&o%DURATION%&r&a because of &e&o%REASON%&r&a.")
+		@DefaultString("Warned &6%VICTIM%&f for %DURATION% because of &6%REASON%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%OPERATOR%&r&7 warned &c&o%VICTIM%&r&7 for &a&o%DURATION%&r&7 because of &e&o%REASON%&r&7.")
+		@DefaultString("&6%OPERATOR%&f warned &6%VICTIM%&f for %DURATION% because of &6%REASON%&f.")
 		ComponentText successNotification();
-		
+
 		@Override
 		@DefaultStrings({
-				"&7&lWarned",
-				"&cDuration: &e%TIME_REMAINING%",
-				"&7",
-				"&c&lReason",
-				"&7%REASON%"})
+				"&6WARNED&f",
+				"Duration: %TIME_REMAINING%",
+				"",
+				"Reason: &6%REASON%"})
 		ComponentText layout();
-		
+
 	}
 
 	interface KickAddition extends PunishmentAdditionSection.WithLayout {
 
 		@Override
-		@DefaultString("&cUsage: /kick &e<player> <reason>&c.")
+		@DefaultString("Usage: /kick <player> <reason>.")
 		Component usage();
 
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 cannot be kicked.")
+		@DefaultString("&6%TARGET%&f cannot be kicked.")
 		ComponentText exempted();
 
 		@Override
@@ -163,24 +161,23 @@ public interface AdditionsSection {
 
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&aKicked &c&o%VICTIM%&r&a because of &e&o%REASON%&r&a.")
+		@DefaultString("Kicked &6%VICTIM%&f because of &6%REASON%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%OPERATOR%&r&7 kicked &c&o%VICTIM%&r&7 because of &e&o%REASON%&r&7.")
+		@DefaultString("&6%OPERATOR%&f kicked &6%VICTIM%&f because of &6%REASON%&f.")
 		ComponentText successNotification();
-		
+
 		@Override
 		@DefaultStrings({
-				"&7&lKicked",
-				"&7",
-				"&c&lReason",
-				"&7%REASON%"})
+				"&6KICKED&f",
+				"",
+				"Reason: &6%REASON%"})
 		ComponentText layout();
 
 		@ConfKey("must-be-online")
-		@DefaultString("&c&o%TARGET%&r&7 must be online.")
+		@DefaultString("&6%TARGET%&f must be online.")
 		ComponentText mustBeOnline();
 
 	}

@@ -58,44 +58,42 @@ public interface ListSection {
 	interface BanList extends PunishmentList {
 		
 		@Override
-		@DefaultString("&cUsage: /banlist &e[page]")
+		@DefaultString("Usage: &6/banlist [page]")
 		Component usage();
-		
+
 		@Override
 		@IntegerRange(min = 1)
 		@DefaultInteger(10)
 		int perPage();
-		
+
 		@Override
-		@DefaultString("&7There are no active bans.")
+		@DefaultString("There are no active bans.")
 		ComponentText noPages();
-		
+
 		@Override
-		@DefaultString("&7Page &e%PAGE%&7 does not exist.")
+		@DefaultString("Page &6%PAGE%&f does not exist.")
 		ComponentText maxPages();
-		
+
 		@Override
 		@ConfKey("permission.command")
-		@DefaultString("&7You may not view the banlist.")
+		@DefaultString("You may not view the banlist.")
 		Component permissionCommand();
-		
+
 		@Override
 		@ConfKey("layout.header")
-		@DefaultStrings({"&7[&eID&7] &e&oSubject",
-				"&7Operator &8/ &7Reason &8/ &7Time Remaining",
-				"&7"})
+		@DefaultStrings({"[&6ID&f] &6Subject&f",
+				"Operator / Reason / Time Remaining"})
 		ComponentText layoutHeader();
-		
+
 		@Override
 		@ConfKey("layout.body")
-		@DefaultStrings({"&7[&e%ID%&7] &e&o%VICTIM%",
-				"&7%OPERATOR% &8/ &7%REASON% &8/ &7%TIME_REMAINING%",
-				"&7"})
+		@DefaultStrings({"[&6%ID%&f] &6%VICTIM%&f",
+				"Operator: &6%OPERATOR%&f / Reason: &6%REASON%&f / Time: &6%TIME_REMAINING%"})
 		ComponentText layoutBody();
-		
+
 		@Override
 		@ConfKey("layout.footer")
-		@DefaultStrings({"&7Page &e%PAGE%&7.||ttp:Click for next page||cmd:/libertybans banlist %NEXTPAGE_KEY%"})
+		@DefaultStrings({"Page: &6%PAGE%&f.||ttp:Click for next page||cmd:/libertybans banlist %NEXTPAGE%"})
 		ComponentText layoutFooter();
 		
 	}
@@ -103,44 +101,42 @@ public interface ListSection {
 	interface MuteList extends PunishmentList {
 		
 		@Override
-		@DefaultString("&cUsage: /mutelist &e[page]")
+		@DefaultString("Usage: &6/mutelist [page]")
 		Component usage();
-		
+
 		@Override
 		@IntegerRange(min = 1)
 		@DefaultInteger(10)
 		int perPage();
-		
+
 		@Override
-		@DefaultString("&7There are no active mutes.")
+		@DefaultString("There are no active mutes.")
 		ComponentText noPages();
-		
+
 		@Override
-		@DefaultString("&7Page &e%PAGE%&7 does not exist.")
+		@DefaultString("Page &6%PAGE%&f does not exist.")
 		ComponentText maxPages();
-		
+
 		@Override
 		@ConfKey("permission.command")
-		@DefaultString("&7You may not view the mutelist.")
+		@DefaultString("You may not view the mutelist.")
 		Component permissionCommand();
-		
+
 		@Override
 		@ConfKey("layout.header")
-		@DefaultStrings({"&7[&eID&7] &e&oSubject",
-				"&7Operator &8/ &7Reason &8/ &7Time Remaining",
-				"&7"})
+		@DefaultStrings({"[&6ID&f] &6Subject&f",
+				"Operator / Reason / Time Remaining"})
 		ComponentText layoutHeader();
-		
+
 		@Override
 		@ConfKey("layout.body")
-		@DefaultStrings({"&7[&e%ID%&7] &e&o%VICTIM%",
-				"&7%OPERATOR% &8/ &7%REASON% &8/ &7%TIME_REMAINING%",
-				"&7"})
+		@DefaultStrings({"[&6%ID%&f] &6%VICTIM%&f",
+				"Operator: &6%OPERATOR%&f / Reason: &6%REASON%&f / Time: &6%TIME_REMAINING%"})
 		ComponentText layoutBody();
-		
+
 		@Override
 		@ConfKey("layout.footer")
-		@DefaultStrings({"&7Page &e%PAGE%&7.||ttp:Click for next page||cmd:/libertybans mutelist %NEXTPAGE_KEY%"})
+		@DefaultStrings({"Page: &6%PAGE%&f.||ttp:Click for next page||cmd:/libertybans mutelist %NEXTPAGE%"})
 		ComponentText layoutFooter();
 		
 	}
@@ -148,44 +144,42 @@ public interface ListSection {
 	interface History extends PunishmentList {
 		
 		@Override
-		@DefaultString("&cUsage: /history &e<player> [page]")
+		@DefaultString("Usage: &6/history <player> [page]")
 		Component usage();
-		
+
 		@Override
 		@IntegerRange(min = 1)
 		@DefaultInteger(10)
 		int perPage();
-		
+
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 has no history.")
+		@DefaultString("&6%TARGET%&f has no history.")
 		ComponentText noPages();
-		
+
 		@Override
-		@DefaultString("&7Page &e%PAGE%&7 does not exist.")
+		@DefaultString("Page &6%PAGE%&f does not exist.")
 		ComponentText maxPages();
-		
+
 		@Override
 		@ConfKey("permission.command")
-		@DefaultString("&7You may not view history.")
+		@DefaultString("You may not view history.")
 		Component permissionCommand();
-		
+
 		@Override
 		@ConfKey("layout.header")
-		@DefaultStrings({"&7[&eID&7] &r&8/ &7Punishment Type",
-				"&7Operator &8/ &7Reason &8/ &7Date Enacted",
-				"&7"})
+		@DefaultStrings({"[&6ID&f] &6Punishment Type&f",
+				"Operator / Reason / Date Enacted"})
 		ComponentText layoutHeader();
-		
+
 		@Override
 		@ConfKey("layout.body")
-		@DefaultStrings({"&7[&e%ID%&7] &r&7/ &7%TYPE%",
-				"&7%OPERATOR% &8/ &7%REASON% &8/ &7%START_DATE%",
-				"&7"})
+		@DefaultStrings({"[&6%ID%&f] &6%TYPE%&f",
+				"Operator: &6%OPERATOR%&f / Reason: &6%REASON%&f / Date: &6%START_DATE%"})
 		ComponentText layoutBody();
-		
+
 		@Override
 		@ConfKey("layout.footer")
-		@DefaultStrings({"&7Page &e%PAGE%&7.||ttp:Click for next page||cmd:/libertybans history %TARGET% %NEXTPAGE_KEY%"})
+		@DefaultStrings({"Page: &6%PAGE%&f.||ttp:Click for next page||cmd:/libertybans history %TARGET% %NEXTPAGE%"})
 		ComponentText layoutFooter();
 		
 	}
@@ -193,42 +187,40 @@ public interface ListSection {
 	interface Warns extends PunishmentList {
 		
 		@Override
-		@DefaultString("&cUsage: /warns &e<player> [page]")
+		@DefaultString("Usage: &6/warns <player> [page]")
 		Component usage();
-		
+
 		@Override
 		@IntegerRange(min = 1)
 		@DefaultInteger(10)
 		int perPage();
-		
+
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 has no warns.")
+		@DefaultString("&6%TARGET%&f has no warns.")
 		ComponentText noPages();
-		
+
 		@Override
-		@DefaultString("&7Page &e%PAGE%&7 does not exist.")
+		@DefaultString("Page &6%PAGE%&f does not exist.")
 		ComponentText maxPages();
-		
+
 		@Override
 		@ConfKey("permission.command")
-		@DefaultString("&7You may not view warns.")
+		@DefaultString("You may not view warns.")
 		Component permissionCommand();
-		
+
 		@Override
 		@ConfKey("layout.header")
-		@DefaultStrings({"&7[&eID&7] Operator &8/ &7Reason &8/ &7Time Remaining",
-				"&7"})
+		@DefaultStrings({"[&6ID&f] &6Operator &f/ &6Reason &f/ &6Time Remaining"})
 		ComponentText layoutHeader();
-		
+
 		@Override
 		@ConfKey("layout.body")
-		@DefaultStrings({"&7[&e%ID%&7] %OPERATOR% &8/ &7%REASON% &8/ &7%TIME_REMAINING%",
-				"&7"})
+		@DefaultStrings({"[&6%ID%&f] &6%OPERATOR%&f / &6%REASON%&f / &6%TIME_REMAINING%"})
 		ComponentText layoutBody();
-		
+
 		@Override
 		@ConfKey("layout.footer")
-		@DefaultStrings({"&7Page &e%PAGE%&7.||ttp:Click for next page||cmd:/libertybans warns %TARGET% %NEXTPAGE_KEY%"})
+		@DefaultStrings({"Page: &6%PAGE%&f.||ttp:Click for next page||cmd:/libertybans warns %TARGET% %NEXTPAGE%"})
 		ComponentText layoutFooter();
 		
 	}
@@ -236,44 +228,42 @@ public interface ListSection {
 	interface Blame extends PunishmentList {
 		
 		@Override
-		@DefaultString("&cUsage: /blame &e<player> [page]")
+		@DefaultString("Usage: &6/blame <player> [page]")
 		Component usage();
-		
+
 		@Override
 		@IntegerRange(min = 1)
 		@DefaultInteger(10)
 		int perPage();
-		
+
 		@Override
-		@DefaultString("&c&o%TARGET%&r&7 has not punished any players.")
+		@DefaultString("&6%TARGET%&f has not punished any players.")
 		ComponentText noPages();
-		
+
 		@Override
-		@DefaultString("&7Page &e%PAGE%&7 does not exist.")
+		@DefaultString("Page &6%PAGE%&f does not exist.")
 		ComponentText maxPages();
-		
+
 		@Override
 		@ConfKey("permission.command")
-		@DefaultString("&7You may not use blame.")
+		@DefaultString("You may not use blame.")
 		Component permissionCommand();
-		
+
 		@Override
 		@ConfKey("layout.header")
-		@DefaultStrings({"&7[&eID&7] &e&oSubject &r&8/ &7Punishment Type",
-				"&7Reason &8/ &7Date Enacted",
-				"&7"})
+		@DefaultStrings({"[&6ID&f] &6Subject / Punishment Type&f",
+				"Reason / Date Enacted"})
 		ComponentText layoutHeader();
-		
+
 		@Override
 		@ConfKey("layout.body")
-		@DefaultStrings({"&7[&e%ID%&7] &e&o%VICTIM% &r&8 / &7%TYPE%",
-				"&7%REASON% &8/ &7%START_DATE%",
-				"&7"})
+		@DefaultStrings({"[&6%ID%&f] &6%VICTIM%&f / &6%TYPE%&f",
+				"Reason: &6%REASON%&f / Date: &6%START_DATE%"})
 		ComponentText layoutBody();
-		
+
 		@Override
 		@ConfKey("layout.footer")
-		@DefaultStrings({"&7Page &e%PAGE%&7.||ttp:Click for next page||cmd:/libertybans blame %TARGET% %NEXTPAGE_KEY%"})
+		@DefaultStrings({"Page: &6%PAGE%&f.||ttp:Click for next page||cmd:/libertybans blame %TARGET% %NEXTPAGE%"})
 		ComponentText layoutFooter();
 		
 	}

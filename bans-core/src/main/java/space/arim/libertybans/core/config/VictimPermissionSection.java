@@ -30,19 +30,19 @@ import space.arim.dazzleconf.annote.ConfKey;
  */
 public interface VictimPermissionSection {
 
-	@ConfDefault.DefaultString("&cYou may not do this to players.")
+	@ConfDefault.DefaultString("You may not do this to players.")
 	Component uuid();
 
 	@ConfKey("ip-address")
-	@ConfDefault.DefaultString("&cYou may not do this to IP addresses.")
+	@ConfDefault.DefaultString("You may not do this to IP addresses.")
 	Component ipAddress();
 
-	@ConfDefault.DefaultString("&cYou may not do this to players and their IP addresses.")
+	@ConfDefault.DefaultString("You may not do this to players and their IP addresses.")
 	Component both();
 
 	interface WithDuration extends VictimPermissionSection {
 
-		@ConfDefault.DefaultString("&cYou may not do this for &e%DURATION%&c.")
+		@ConfDefault.DefaultString("You may not do this for %DURATION%.")
 		ComponentText duration();
 
 	}

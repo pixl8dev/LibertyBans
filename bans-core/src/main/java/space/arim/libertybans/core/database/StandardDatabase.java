@@ -46,9 +46,12 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -148,8 +151,43 @@ public final class StandardDatabase implements InternalDatabase, AutoCloseable {
 			execute((context) -> context.query(command).execute()).join();
 		}
 		close();
+		deregisterJdbcDrivers();
 	}
-	
+
+	/*
+	 * JDBC drivers register themselves with the global java.sql.DriverManager when their class is
+	 * loaded. DriverManager then holds a strong reference to the driver, and through it, to the
+	 * classloader that loaded the driver - which, for LibertyBans, is our dependency classloader.
+	 * Left registered, this pins the classloader in memory so it cannot be garbage-collected when
+	 * the plugin is disabled or reloaded (e.g. via PlugMan), leaking a classloader on every reload.
+	 *
+	 * We therefore deregister any driver loaded by our own classloader. This runs only from
+	 * closeCompletely(), i.e. on full shutdown or a vendor-changing restart, never on a same-vendor
+	 * restart (which reuses close()), so an in-use driver is never deregistered out from under us.
+	 */
+	private void deregisterJdbcDrivers() {
+		ClassLoader ourLoader = getClass().getClassLoader();
+		for (Driver driver : Collections.list(DriverManager.getDrivers())) {
+			if (loadedBy(driver.getClass().getClassLoader(), ourLoader)) {
+				try {
+					DriverManager.deregisterDriver(driver);
+					logger.debug("Deregistered JDBC driver {}", driver.getClass().getName());
+				} catch (SQLException ex) {
+					logger.warn("Unable to deregister JDBC driver {}", driver.getClass().getName(), ex);
+				}
+			}
+		}
+	}
+
+	private static boolean loadedBy(ClassLoader candidate, ClassLoader ancestor) {
+		for (ClassLoader loader = candidate; loader != null; loader = loader.getParent()) {
+			if (loader == ancestor) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public PunishmentDatabase asExternal() {
 		return external;

@@ -100,7 +100,7 @@ public interface MessagesConfig {
 		
 		@ConfKey("prefix.value")
 		@ConfComments("The prefix to use")
-		@DefaultString("&6&lLibertyBans &r&8»&7 ")
+		@DefaultString("&6Bans &f| ")
 		Component rawPrefix();
 
 		default Component prefix() {
@@ -110,7 +110,7 @@ public interface MessagesConfig {
 		@ConfKey("base-permission-message")
 		@ConfComments("If a player types /libertybans but does not have the permission 'libertybans.commands', "
 				+ "this is the denial message")
-		@DefaultString("&cYou may not use this.")
+		@DefaultString("You may not use this.")
 		Component basePermissionMessage();
 		
 		@ConfKey("not-found")
@@ -119,20 +119,20 @@ public interface MessagesConfig {
 		NotFound notFound();
 		
 		interface NotFound {
-			
-			@DefaultString("&c&o%TARGET%&r&7 was not found online or offline.")
+
+			@DefaultString("&6%TARGET%&f was not found online or offline.")
 			ComponentText player();
-			
-			@DefaultString("&c&o%TARGET%&r&7 is not a valid uuid.")
+
+			@DefaultString("&6%TARGET%&f is not a valid uuid.")
 			ComponentText uuid();
 
 			@ConfKey("player-or-address")
-			@DefaultString("&c&o%TARGET%&r&7 was not found online or offline, and is not a valid IP address.")
+			@DefaultString("&6%TARGET%&f was not found online or offline, and is not a valid IP address.")
 			ComponentText playerOrAddress();
 
 		}
-		
-		@DefaultString("&cUnknown sub command. Displaying usage:")
+
+		@DefaultString("Unknown sub command. Displaying usage:")
 		Component usage();
 
 		@SubSection
@@ -141,15 +141,15 @@ public interface MessagesConfig {
 		@ConfHeader("This section is only relevant if using the server scopes feature")
 		interface Scopes {
 
-			@DefaultString("&cInvalid scope specified: &e%SCOPE_ARG%&c.")
+			@DefaultString("Invalid scope specified: &6%SCOPE_ARG%&f.")
 			ComponentText invalid();
 
 			@ConfKey("no-permission")
-			@DefaultString("&cYou may not use scope &e%SCOPE%&c.")
+			@DefaultString("You may not use scope &6%SCOPE%&f.")
 			ComponentText noPermission();
 
 			@ConfKey("no-permission-for-default")
-			@DefaultString("&cYou may not use this command without specifying a scope.")
+			@DefaultString("You may not use this command without specifying a scope.")
 			Component noPermissionForDefault();
 
 		}
@@ -162,20 +162,20 @@ public interface MessagesConfig {
 	interface Admin {
 		
 		@ConfKey("no-permission")
-		@DefaultString("&cSorry, you cannot use this.")
+		@DefaultString("Sorry, you cannot use this.")
 		Component noPermission();
-		
-		@DefaultString("&a...")
+
+		@DefaultString("...")
 		Component ellipses();
-		
-		@DefaultString("&aReloaded")
+
+		@DefaultString("Reloaded")
 		Component reloaded();
 
 		@ConfKey("reload-failed")
-		@DefaultString("&cAn error occurred reloading the configuration. Please check the server console.")
+		@DefaultString("An error occurred reloading the configuration. Please check the server console.")
 		Component reloadFailed();
 
-		@DefaultString("&aRestarted")
+		@DefaultString("Restarted")
 		Component restarted();
 
 		@SubSection
@@ -185,19 +185,19 @@ public interface MessagesConfig {
 
 			@ConfKey("in-progress")
 			@ConfComments("To prevent mistakes, it is not allowed to import multiple times at once.")
-			@DefaultString("&cThere is already an import in progress.")
+			@DefaultString("There is already an import in progress.")
 			Component inProgress();
 
-			@DefaultString("&7Import has started. View your server console for details and progress.")
+			@DefaultString("Import has started. View your server console for details and progress.")
 			Component started();
 
-			@DefaultString("&cUsage: /libertybans import <advancedban|litebans|vanilla|self>")
+			@DefaultString("Usage: &6/libertybans import <advancedban|litebans|vanilla|self>")
 			Component usage();
 
-			@DefaultString("&7Import completed.")
+			@DefaultString("Import completed.")
 			Component complete();
 
-			@DefaultString("&cImport failed. View the server console for details.")
+			@DefaultString("Import failed. View the server console for details.")
 			Component failure();
 
 		}
@@ -207,7 +207,7 @@ public interface MessagesConfig {
 
 		interface Addons {
 
-			@DefaultString("&cUsage: /libertybans addon <install|list|reload>")
+			@DefaultString("Usage: &6/libertybans addon <install|list|reload>")
 			Component usage();
 
 			@SubSection
@@ -215,10 +215,10 @@ public interface MessagesConfig {
 
 			interface Listing {
 
-				@DefaultString("&b&lAddons Installed")
+				@DefaultString("&lAddons Installed")
 				Component message();
 
-				@DefaultString("&7- %ADDON%")
+				@DefaultString("- &6%ADDON%")
 				ComponentText layout();
 			}
 
@@ -227,19 +227,19 @@ public interface MessagesConfig {
 
 			interface Install {
 
-				@DefaultString("&cUsage: /libertybans addon install <addon>")
+				@DefaultString("Usage: &6/libertybans addon install <addon>")
 				Component usage();
 
 				@ConfKey("already-installed")
-				@DefaultString("&aAddon &e%ADDON%&a is already installed or on the file system.")
+				@DefaultString("Addon &6%ADDON%&f is already installed or on the file system.")
 				ComponentText alreadyInstalled();
 
 				@ConfKey("does-not-exist")
-				@DefaultString("&cCannot find &e%ADDON%&c among the standard addon packages. &7If you want to use an " +
+				@DefaultString("Cannot find &6%ADDON%&f among the standard addon packages. If you want to use an " +
 						"external or custom addon, please install the jar directly to plugins/LibertyBans/addons.")
 				ComponentText doesNotExist();
 
-				@DefaultString("&aInstalled addon &e%ADDON%&a. It will be loaded after the next server restart.")
+				@DefaultString("Installed addon &6%ADDON%&f. It will be loaded after the next server restart.")
 				ComponentText installed();
 
 			}
@@ -250,17 +250,17 @@ public interface MessagesConfig {
 
 			interface Reloading {
 
-				@DefaultString("&cUsage: /libertybans addon reload <addon>. To reload all addons, /libertybans reload will suffice.")
+				@DefaultString("Usage: &6/libertybans addon reload <addon>&f. To reload all addons, use &6/libertybans reload&f.")
 				Component usage();
 
 				@ConfKey("does-not-exist")
-				@DefaultString("&cThat addon does not exist.")
+				@DefaultString("That addon does not exist.")
 				Component doesNotExist();
 
-				@DefaultString("&aReloaded addon &e%ADDON%&a.")
+				@DefaultString("Reloaded addon &6%ADDON%&f.")
 				ComponentText success();
 
-				@DefaultString("&cAn error occurred reloading addon configuration. Please check the server console.")
+				@DefaultString("An error occurred reloading addon configuration. Please check the server console.")
 				Component failed();
 
 			}
@@ -357,7 +357,7 @@ public interface MessagesConfig {
 		@ConfComments({
 				"When there is no more time remaining in a punishment (the punishment has expired),",
 				"this becomes the value of the %TIME_REMAINING% variable"})
-		@DefaultString("N/A")
+		@DefaultString("&fN/A")
 		String noTimeRemainingDisplay();
 
 		@ConfKey("victim-display")
@@ -374,7 +374,7 @@ public interface MessagesConfig {
 
 			@ConfKey("censored-ip-address")
 			@ConfComments("The substitute text when an IP address cannot be viewed because the user lacks permission")
-			@DefaultString("<censored IP address>")
+			@DefaultString("&f<censored IP address>")
 			String censoredIpAddress();
 
 			@ConfKey("player-name-unknown")
@@ -383,7 +383,7 @@ public interface MessagesConfig {
 					"users are punished by UUID, but on some configurations it is not possible to lookup player names.",
 					"When this occurs, the following text is used instead of the player name."
 			})
-			@DefaultString("-NameUnknown-")
+			@DefaultString("&f-NameUnknown-")
 			String playerNameUnknown();
 
 		}
@@ -400,7 +400,7 @@ public interface MessagesConfig {
 
 		@ConfKey("global-scope-display")
 		@ConfComments("How should the global scope be displayed?")
-		@DefaultString("All servers")
+		@DefaultString("&fAll servers")
 		String globalScopeDisplay();
 		
 		@ConfKey("punishment-type-display")
@@ -432,11 +432,11 @@ public interface MessagesConfig {
 
 			@ConfKey("not-expired")
 			@ConfComments("How do you describe a punishment which is not expired?")
-			@DefaultString("Not expired")
+			@DefaultString("&fNot expired")
 			String notExpired();
 
 			@ConfComments("How do you describe an expired punishment?")
-			@DefaultString("Expired")
+			@DefaultString("&fExpired")
 			String expired();
 
 		}
@@ -453,7 +453,7 @@ public interface MessagesConfig {
 					"How do you describe the lack of an escalation track?",
 					"The value will be displayed for the %TRACK% variable"
 			})
-			@DefaultString("No track")
+			@DefaultString("&fNo track")
 			String noTrack();
 
 			@ConfKey("no-track-id")
@@ -461,7 +461,7 @@ public interface MessagesConfig {
 					"How do you describe the lack of an escalation track with respect to its ID?",
 					"The value will be displayed for the %TRACK_ID% variable"
 			})
-			@DefaultString("No track ID")
+			@DefaultString("&fNo track ID")
 			String noTrackId();
 
 			@ConfKey("no-track-namespace")
@@ -469,7 +469,7 @@ public interface MessagesConfig {
 					"How do you describe the lack of an escalation track with respect to its namespace?",
 					"The value will be displayed for the %TRACK_NAMESPACE% variable"
 			})
-			@DefaultString("(none)")
+			@DefaultString("&f(none)")
 			String noTrackNamespace();
 
 			@ConfKey("track-display-names")
@@ -481,8 +481,8 @@ public interface MessagesConfig {
 					"This option affects the %TRACK% variable but not the %TRACK_ID% variable."
 			})
 			@DefaultMap({
-					"hacking", "Hacking",
-					"spam", "Spamming"
+					"hacking", "&fHacking",
+					"spam", "&fSpamming"
 			})
 			Map<String, String> trackDisplayNames();
 
@@ -511,12 +511,12 @@ public interface MessagesConfig {
 	interface Misc {
 		
 		@ConfKey("unknown-error")
-		@DefaultString("&cAn unknown error occurred.")
+		@DefaultString("An unknown error occurred.")
 		Component unknownError();
-		
+
 		@ConfKey("sync-chat-denial-message")
 		@ConfComments("Only applicable if synchronous enforcement strategy is DENY in the main config")
-		@DefaultString("&cSynchronous chat denied. &7Please try again.")
+		@DefaultString("Synchronous chat denied. Please try again.")
 		Component syncDenialMessage();
 		
 		@SubSection

@@ -26,6 +26,8 @@ import space.arim.libertybans.bootstrap.*;
 import space.arim.libertybans.bootstrap.logger.BootstrapLogger;
 import space.arim.libertybans.bootstrap.logger.JulBootstrapLogger;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -33,6 +35,7 @@ import java.util.logging.Level;
 public final class SpigotPlugin extends JavaPlugin {
 
 	private BaseFoundation base;
+	private ClassLoader launchLoader;
 
 	@Override
 	public synchronized void onEnable() {
@@ -46,11 +49,25 @@ public final class SpigotPlugin extends JavaPlugin {
 	public synchronized void onDisable() {
 		BaseFoundation base = this.base;
 		this.base = null;
+		ClassLoader launchLoader = this.launchLoader;
+		this.launchLoader = null;
+
 		if (base == null) {
 			getLogger().warning("LibertyBans wasn't launched; check your log for a startup error");
-			return;
+		} else {
+			base.shutdown();
 		}
-		base.shutdown();
+		// Close the dependency classloader so it - and everything it loaded, including the JDBC
+		// driver and connection pool - can be garbage-collected. This matters when the plugin is
+		// disabled and re-enabled without a full server restart, e.g. via PlugMan, which would
+		// otherwise leak a classloader (and its loaded libraries) on every cycle.
+		if (launchLoader instanceof Closeable closeable) {
+			try {
+				closeable.close();
+			} catch (IOException ex) {
+				getLogger().log(Level.WARNING, "Failed to close the LibertyBans classloader", ex);
+			}
+		}
 	}
 
 	static Platform.Builder detectPlatform(JavaPlugin plugin) {
@@ -103,6 +120,8 @@ public final class SpigotPlugin extends JavaPlugin {
 			executor.shutdown();
 			assert executor.isTerminated();
 		}
+		// Retain the dependency classloader so it can be closed on disable
+		this.launchLoader = launchLoader;
 		BaseFoundation base;
 		try {
 			base = new Instantiator(

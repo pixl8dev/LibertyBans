@@ -26,6 +26,12 @@ Each addon has its ID listed in [brackets].
 
 ## New Commands
 
+### Ban reason [command-banreason]
+
+Provides the `/libertybans banreason <player>` command. This command traces the *root cause* of why a player is banned. It looks up the player by name, then finds the ban that actually applies to them according to the server's configured address strictness — including bans applied through a shared IP address or a linked alt account. If the player is banned directly, the command says so; otherwise it names the account or address that is the real source of the ban, so staff can quickly find the right punishment when dealing with alts or a suspected false ban.
+
+Requires the permission `libertybans.addon.banreason.use`.
+
 ### Check punishment [command-checkpunish]
 
 This addon enables the `/libertybans checkpunish <id>` command. This command displays the details of a specific punishment given the punishment ID.

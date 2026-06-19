@@ -49,22 +49,22 @@ public interface RemovalsSection {
 	interface BanRemoval extends PunishmentRemoval {
 		
 		@Override
-		@DefaultString("&cUsage: /unban &e<player>&c.")
+		@DefaultString("Usage: &6/unban <player>&f.")
 		Component usage();
 
 		@Override
 		@ConfKey("not-found")
-		@DefaultString("&c&o%TARGET%&r&7 is not banned.")
+		@DefaultString("&6%TARGET%&f is not banned.")
 		ComponentText notFound();
-		
+
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&7Unbanned &c&o%VICTIM%&r&7.")
+		@DefaultString("Unbanned &6%VICTIM%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%UNOPERATOR%&r&7 unbanned &c&o%VICTIM%&r&7.")
+		@DefaultString("&6%UNOPERATOR%&f unbanned &6%VICTIM%&f.")
 		ComponentText successNotification();
 		
 	}
@@ -72,22 +72,22 @@ public interface RemovalsSection {
 	interface MuteRemoval extends PunishmentRemoval {
 		
 		@Override
-		@DefaultString("&cUsage: /unmute &e<player>&c.")
+		@DefaultString("Usage: &6/unmute <player>&f.")
 		Component usage();
 
 		@Override
 		@ConfKey("not-found")
-		@DefaultString("&c&o%TARGET%&r&7 is not muted.")
+		@DefaultString("&6%TARGET%&f is not muted.")
 		ComponentText notFound();
-		
+
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&7Unmuted &c&o%VICTIM%&r&7.")
+		@DefaultString("Unmuted &6%VICTIM%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%UNOPERATOR%&r&7 unmuted &c&o%VICTIM%&r&7.")
+		@DefaultString("&6%UNOPERATOR%&f unmuted &6%VICTIM%&f.")
 		ComponentText successNotification();
 		
 	}
@@ -95,26 +95,26 @@ public interface RemovalsSection {
 	interface WarnRemoval extends PunishmentRemoval {
 		
 		@Override
-		@DefaultString("&cUsage: /unwarn &e<player> <id>&c.")
+		@DefaultString("Usage: &6/unwarn <player> <id>&f.")
 		Component usage();
 
 		@Override
 		@ConfKey("not-found")
-		@DefaultString("&c&o%TARGET%&r&7 does not have a warn by &c&o%ID%&r&7.")
+		@DefaultString("&6%TARGET%&f does not have a warn by &6%ID%&f.")
 		ComponentText notFound();
-		
+
 		@ConfKey("not-a-number")
-		@DefaultString("&c&o%ID_ARG%&r&7 is not a number.")
+		@DefaultString("&6%ID_ARG%&f is not a number.")
 		ComponentText notANumber();
-		
+
 		@Override
 		@ConfKey("success.message")
-		@DefaultString("&7Unwarned &c&o%VICTIM%&r&7.")
+		@DefaultString("Unwarned &6%VICTIM%&f.")
 		ComponentText successMessage();
-		
+
 		@Override
 		@ConfKey("success.notification")
-		@DefaultString("&c&o%UNOPERATOR%&r&7 unwarned &c&o%VICTIM%&r&7.")
+		@DefaultString("&6%UNOPERATOR%&f unwarned &6%VICTIM%&f.")
 		ComponentText successNotification();
 		
 	}

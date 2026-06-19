@@ -38,14 +38,14 @@ public interface AltsSection {
 	@ConfHeader("Regarding the /alts command")
 	interface Command extends AccountListFormatting {
 
-		@ConfDefault.DefaultString("&cUsage: /alts &e<player> [page]&c.")
+		@ConfDefault.DefaultString("Usage: &6/alts <player>&f.")
 		Component usage();
 
-		@ConfDefault.DefaultString("&cYou may not check alts.")
+		@ConfDefault.DefaultString("You may not check alts.")
 		Component permission();
 
 		@ConfKey("none-found")
-		@ConfDefault.DefaultString("&7Page does not exist.")
+		@ConfDefault.DefaultString("No alt accounts found")
 		ComponentText noneFound();
 
 		@Override
@@ -60,9 +60,9 @@ public interface AltsSection {
 				"%LASTPAGE_KEY% - a code which if used with the command, shows the last page"
 		})
 		@ConfDefault.DefaultStrings({
-				"&7Alt account report for &c&o%TARGET%&7 follows.",
-				"&7Strong possibility - Same address as banned player.",
-				"&7Mere possibility - Linked to banned player by common past address"})
+				"Alt account report for &6%TARGET%&f follows.",
+				"Strong possibility - Same address as banned player.",
+				"Mere possibility - Linked to banned player by common past address"})
 		ComponentText header();
 
 		@ConfKey("oldest-first")
@@ -86,7 +86,7 @@ public interface AltsSection {
 				"How to format the footer. This is sent after every page.",
 				"Available variables are the same as for the header."
 		})
-		@ConfDefault.DefaultString("&7<Next Page>||ttp:Click for next page||cmd:/libertybans alts %TARGET% %NEXTPAGE_KEY%")
+		@ConfDefault.DefaultString("&6<Next Page>||ttp:Click for next page||cmd:/libertybans alts %TARGET% %NEXTPAGE_KEY%")
 		ComponentText footer();
 
 	}
@@ -100,9 +100,9 @@ public interface AltsSection {
 		@Override
 		@ConfComments("The message to display atop the alt check. Set to an empty string to disable")
 		@ConfDefault.DefaultStrings({
-				"&c&o%TARGET%&7 may be an alt account. Some of the accounts they're linked to are listed below.",
-				"&7Strong possibility - Same address as other player.",
-				"&7Mere possibility - Linked to other player by common past address"})
+				"&6%TARGET%&f may be an alt account. Report follows.",
+				"Strong possibility - Same address as banned player.",
+				"Mere possibility - Linked to banned player by common past address"})
 		ComponentText header();
 
 		@ConfKey("oldest-first")
@@ -142,15 +142,15 @@ public interface AltsSection {
 				"%RELEVANT_USERID% - the uuid of the other account",
 				"%DATE_RECORDED% - the date the alt account was recorded"
 		})
-		@ConfDefault.DefaultString("%RELEVANT_USER% &r&7(per %ADDRESS%) at %DATE_RECORDED% - %DETECTION_KIND%")
+		@ConfDefault.DefaultString("&6%RELEVANT_USER%&f (per &6%ADDRESS%&f) at &6%DATE_RECORDED%&f - &6%DETECTION_KIND%")
 		ComponentText layout();
 
 		@ConfComments("The description for an alt account detected by normal detection.")
-		@ConfDefault.DefaultString("&cStrong possibility")
+		@ConfDefault.DefaultString("Strong possibility")
 		Component normal();
 
 		@ConfComments("The description for an alt account detected by strict detection.")
-		@ConfDefault.DefaultString("&eMere possibility")
+		@ConfDefault.DefaultString("Mere possibility")
 		Component strict();
 
 		@ConfKey("name-display")
@@ -164,14 +164,14 @@ public interface AltsSection {
 		})
 		interface NameDisplay {
 
-			@ConfDefault.DefaultString("&c&o%USERNAME%")
+			@ConfDefault.DefaultString("&6%USERNAME%")
 			ComponentText banned();
 
-			@ConfDefault.DefaultString("&e&o%USERNAME%")
+			@ConfDefault.DefaultString("&6%USERNAME%")
 			ComponentText muted();
 
 			@ConfKey("not-punished")
-			@ConfDefault.DefaultString("&f&o%USERNAME%")
+			@ConfDefault.DefaultString("&6%USERNAME%")
 			ComponentText notPunished();
 		}
 
